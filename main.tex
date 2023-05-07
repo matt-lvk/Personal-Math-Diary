@@ -1,0 +1,194 @@
+\documentclass[12pt]{article}
+
+\usepackage[utf8]{inputenc}
+
+\usepackage[left=1.5cm,right=1.5cm,top=3cm,bottom=3cm]{geometry}
+\geometry{verbose}
+
+%\usepackage{newtxtext}
+\usepackage{enumitem}
+\setenumerate[1]{leftmargin=3em}
+
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsopn}
+
+\usepackage{mathrsfs}
+\usepackage{mdframed}
+\usepackage{tikz-cd}
+
+\usepackage{esint}
+
+\usepackage{thmtools, thm-restate}
+\usepackage{hyperref}
+
+\usepackage{verbatim}
+\usepackage{mathtools}
+\usepackage{fullpage}
+\usepackage{dsfont}
+
+\usepackage{physics}
+\usepackage{setspace}
+\usepackage{epstopdf}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+
+\usepackage{scalerel,stackengine}
+\usepackage{float}
+\usepackage{ulem}
+
+\usepackage{authblk}
+
+\usepackage{soul}
+
+\usepackage[sort&compress]{natbib}
+
+
+
+
+
+%%%%%%%%%% Mathmematical Things %%%%%%%%%%
+
+%%%%% Theorem, Cor, Lem, etc. %%%%%
+
+\theoremstyle{remark}
+\newtheorem{Remark}{Remark}[section]
+
+\theoremstyle{plain}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Lemma}{Lemma}[section]
+\newtheorem{Corollary}{Corollary}[section]
+\newtheorem{Definition}{Definition}[section]
+\newtheorem{Proposition}{Proposition}[section]
+
+\newtheorem{assump}{Assumption}
+\newtheorem{assumpB}{Assumption}
+\renewcommand\theassump{A\arabic{assump}}
+\renewcommand\theassumpB{B\arabic{assumpB}}
+\DeclareRobustCommand{\rchi}{{\mathpalette\irchi\relax}}
+\newcommand{\irchi}[2]{\raisebox{\depth}{$#1\chi$}} % inner command, used by \rchi
+
+
+\newtheorem{assumptionex}{Assumption}
+\newenvironment{assumption}
+{\pushQED{\qed}\renewcommand{\qedsymbol}{$\bullet$}\assumptionex}
+{\popQED\endassumptionex}
+
+\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{2}
+%\addcontentsline{toc}{section}{Abstract}
+
+%%%%% New operators %%%%%
+
+\DeclareMathOperator{\sign}{sign}
+\DeclareMathOperator{\erfc}{erfc}
+\DeclareMathOperator{\diverg}{div}
+\DeclareMathOperator{\Op}{Op}
+\DeclareMathOperator{\Ima}{Im}
+\DeclareMathOperator{\RePart}{Re}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\supp}{supp}
+
+\def \qed {\hfill \vrule height6pt width 6pt depth 0pt}
+\newcommand{\al}{\alpha}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\p}{\partial}
+\newcommand{\unity}{{1\!\!\!\:\mathrm{l}}}
+\newcommand{\rightv}{\overset{\rightharpoonup}}
+\newcommand{\harpoon}{\overset{\rightharpoonup}}
+\newcommand{\hsnorm}[1]{\norm{#1}_{\text{HS}}}
+\newcommand{\opnorm}[1]{\norm{#1}_{\text{op}}}
+\newcommand{\trnorm}[1]{\norm{#1}_{\Tr}}
+
+\usepackage{ulem}
+
+\usepackage{natbib} % reference manager
+%\usepackage[normalem]{ulem} %to strike the words
+
+%%%%% Displaybreaks %%%%%
+\allowdisplaybreaks
+
+%%%%% Equation numbering %%%%%
+\numberwithin{equation}{section}
+
+
+\stackMath
+\newcommand\reallywidehat[1]{%
+	\savestack{\tmpbox}{\stretchto{%
+			\scaleto{%
+				\scalerel*[\widthof{\ensuremath{#1}}]{\kern-.6pt\bigwedge\kern-.6pt}%
+				{\rule[-\textheight/2]{1ex}{\textheight}}%WIDTH-LIMITED BIG WEDGE
+			}{\textheight}% 
+		}{0.5ex}}%
+	\stackon[1pt]{#1}{\tmpbox}%
+}
+
+
+%\renewcommand{\geqslant}{\geq}
+%\renewcommand{\leqslant}{\leq}
+\renewcommand{\tilde}{\widetilde}
+\renewcommand{\leq}{\leqslant}
+\renewcommand{\geq}{\geqslant}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+
+\title{Writing Husimi Measure under Hartree Fock equation}
+\date{}
+\author{}
+
+\begin{document}
+	
+\section{May 2023}
+
+\subsection{Safety Stock}
+\begin{Theorem}
+	Let the lead-time $T$ be normally distributed, i.e. $T\sim N(\mu_\ell, \sigma^2_\ell)$ and denote the set of demand of period $i$ as $\{D_i\}_{i=1}^T$ where $D_i \sim N(\mu_d, \sigma^2_d)$ for each $1\leq i \leq T$. Then the safety stock level, $SS$ satisifies the following equation
+		\[
+		SS = z_\alpha \sqrt{\sigma_d^2 \mu_\ell + \mu_d^2 \sigma^2_\ell},
+		\]
+		where $z_\alpha$ is the Z-value of a desired $\alpha$ which is chosen.
+\end{Theorem}
+
+\begin{proof}
+	Denote the demand between within lead-time as $D(T) := \sum_{i=1}^N D_i$. The safety stock level is then set at
+		\[
+		SS = z_\alpha \sqrt{Var(D(T))}.
+		\]
+	Thus we need only to prove $Var(D(T))$. 
+	
+	From Towering-property, note that 
+	\begin{align*}
+		\mathbb{E}[D(T)] & = \mathbb{E} \big[\mathbb{E}[D(T)|T]\big]\\
+		&
+		= \mathbb{E}\big[T \mu_d\big] = \mu_d \mathbb{E}[T] = \mu_d \mu_\ell.
+	\end{align*}
+	Furthemore, again with Towering-property, we have
+	\begin{align*}
+		\mathbb{E}[D^2(T)] & = \mathbb{E} \big[\mathbb{E}[D^2(T)|T]\big]
+			\\
+			& = \mathbb{E}\big[Var[D(T)|T] + \big(\mathbb{E}[D(T)|T]\big)^2\big]
+			\\			
+			& = \mathbb{E}\big[T \sigma_d^2 + \big(T \mu_d \big)^2\big]
+			\\
+			& = \sigma_d^2 \mathbb{E}[T] + \mu_d^2\mathbb{E}[T^2]
+			\\
+			& =  \sigma_d^2 \mu_\ell + \mu_d^2\left(Var(T) + (\mathbb{E}[T])^2\right)
+			\\
+			& = \sigma_d^2 \mu_\ell + \mu_d^2\left(\sigma^2_\ell+ \mu_\ell^2\right).
+	\end{align*}
+Finally,
+	\begin{align*}
+		Var(D(T)) &= \mathbb{E}[D^2(T)] - \big(\mathbb{E}[D(T)]\big)^2
+		\\
+		& =  \sigma_d^2 \mu_\ell + \mu_d^2\left(\sigma^2_\ell+ \mu_\ell^2\right) - (\mu_d \mu_\ell)^2
+		\\
+		& = \sigma_d^2 \mu_\ell + \mu_d^2 \sigma^2_\ell.
+	\end{align*}
+\end{proof}
+
+
+\end{document}
