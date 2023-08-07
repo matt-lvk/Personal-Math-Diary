@@ -1,4 +1,4 @@
-\documentclass[12pt]{article}
+\documentclass[10pt]{article}
 
 \usepackage[utf8]{inputenc}
 
@@ -45,6 +45,9 @@
 \usepackage[sort&compress]{natbib}
 
 
+
+\usepackage{tikz}
+\usetikzlibrary{trees}
 
 
 
@@ -142,7 +145,7 @@
 
 \begin{document}
 	
-\section{May 2023}
+\section{2023}
 
 \subsection{Safety Stock}
 \begin{Theorem}
@@ -198,6 +201,83 @@ Finally,
 \end{Theorem}
 
 \subsection{Gambler's Ruin}
-Suppose $p$ is the probability of winning a bet and $q = 1 - p$ is the probability of losing a bet. 
+Let $p$ is the probability of winning $\$1$ and $q = 1 - p$ is the probability of losing $\$1$. Suppose that a person starts with $\$i$ amount of money where $0 < i < N$ and $N \in \N$ is the number he would want to walk away with. The probability of him winning $a_k$ is give by
+	\[ a_k =
+		\begin{cases}
+			\frac{1-\left(\frac{q}{p}\right)^i}{1 - \left(\frac{q}{p}\right)^N} \quad & \text{where } p \neq q,\\
+			\frac{i}{N}  &  \text{where } p = q = \frac{1}{2}.
+		\end{cases}
+	\]
+	
+\begin{proof}
+	Note that
+		\tikzstyle{level 1}=[level distance=3.5cm, sibling distance=3.5cm]
+		\tikzstyle{level 2}=[level distance=3.5cm, sibling distance=2cm]
+		\tikzstyle{bag} = [text width=4em, text centered]
+		\tikzstyle{end} = [circle, minimum width=3pt,fill, inner sep=0pt]
+		\begin{center}
+				\begin{tikzpicture}[grow=right, sloped]
+				\node[bag] {$i$}
+				child {
+					node[bag] {$i + 1$}        
+					edge from parent 
+					node[above] {win $\$1$}
+					node[below]  {$p$}
+				}
+				child {
+					node[bag] {$i -1$}        
+					edge from parent         
+					node[above] {Lose $\$1$}
+					node[below]  {$q$}
+				};
+			\end{tikzpicture}
+		\end{center}
+	Then, we observe
+	\begin{align*}
+		a_i  &= p a_{i+1} + q a_{i-1} \\
+		\underbrace{(p + q)}_{=1}  a_i &= p a_{i+1} + q a_{i-1} \\
+		 a_{i+1} - a_i & = \frac{p}{q} (a_i - a_{i-1}).
+	\end{align*}
+Denote $b_j := a_i - a_{i-1}$ and note that $b_1 = a_1$ since $a_0 = 0$ is the absorption edge, we deduce by recursion that
+	\[
+		b_{i + 1} =  \left(\frac{p}{q}\right)^{i+1} a_1.
+	\]
+Moreover, note that
+	\begin{align*}
+		a_{i+1}  - a_1 &= \sum_{i}^{k = 1} a_{k+1} - a_k 
+		\\
+		& = \sum_{k=1}^i \left(\frac{p}{q}\right)^k a_1.
+		\\
+		\Rightarrow a_{i+!}  &= a_1 \left(1+\sum_{k=1}^i \left(\frac{p}{q}\right)^k  \right)
+		\\
+		& = a_1 \left(\sum_{k=0}^i \left(\frac{p}{q}\right)^k  \right).
+	\end{align*}
+If $p\neq q$, by geometric series, we obtain
+	\[
+		a_{i+1} = a_1 \frac{1- \left(\frac{p}{q}\right)^{i+1} }{1- \left(\frac{p}{q}\right)}.
+	\]
+If $ p = q = 0.5$, then
+	\[
+		a_{i+1}  = a_1 (i+1).
+	\]
+	
+Now to solve for $a_1$, observe that since at absoprtion point $a_N = 1$, then letting $i + 1 = N$, we get
+	\[ 1 = a_N =
+\begin{cases}
+	\frac{1-\left(\frac{q}{p}\right)^N}{1 - \left(\frac{q}{p}\right)} \quad & \text{where } p \neq q,\\
+	a_1 N  &  \text{where } p = q = \frac{1}{2},
+\end{cases}
+\]
+which implies
+	\[ a_1 =
+\begin{cases}
+	\frac{1-\left(\frac{q}{p}\right)}{1 - \left(\frac{q}{p}\right)^N} \quad & \text{where } p \neq q,\\
+	\frac{1}{N}  &  \text{where } p = q = \frac{1}{2}.
+\end{cases}
+\]
+Substituting this back, we obtained the desired equation.
+\end{proof}
+
+
 
 \end{document}
