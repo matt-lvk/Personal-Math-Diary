@@ -144,57 +144,16 @@
 \author{}
 
 \begin{document}
-	
-\section{2023}
+\setcounter{secnumdepth}{5}
 
-\subsection{Safety Stock}
-\begin{Theorem}
-	Let the lead-time $T$ be normally distributed, i.e. $T\sim N(\mu_\ell, \sigma^2_\ell)$ and denote the set of demand of period $i$ as $\{D_i\}_{i=1}^T$ where $D_i \sim N(\mu_d, \sigma^2_d)$ for each $1\leq i \leq T$. Then the safety stock level, $SS$ satisifies the following equation
-		\[
-		SS = z_\alpha \sqrt{\sigma_d^2 \mu_\ell + \mu_d^2 \sigma^2_\ell},
-		\]
-		where $z_\alpha$ is the Z-value of a desired $\alpha$ which is chosen.
-\end{Theorem}
-
-\begin{proof}
-	Denote the demand between within lead-time as $D(T) := \sum_{i=1}^T D_i$. The safety stock level is then set at
-		\[
-		SS = z_\alpha \sqrt{Var(D(T))}.
-		\]
-	Thus we need only to prove $Var(D(T))$. 
-	
-	From Towering-property, note that 
-	\begin{align*}
-		\mathbb{E}[D(T)] & = \mathbb{E} \big[\mathbb{E}[D(T)|T]\big]\\
-		&
-		= \mathbb{E}\big[T \mu_d\big] = \mu_d \mathbb{E}[T] = \mu_d \mu_\ell.
-	\end{align*}
-	Furthemore, again with Towering-property, we have
-	\begin{align*}
-		\mathbb{E}[D^2(T)] & = \mathbb{E} \big[\mathbb{E}[D^2(T)|T]\big]
-			\\
-			& = \mathbb{E}\big[Var[D(T)|T] + \big(\mathbb{E}[D(T)|T]\big)^2\big]
-			\\			
-			& = \mathbb{E}\big[T \sigma_d^2 + \big(T \mu_d \big)^2\big]
-			\\
-			& = \sigma_d^2 \mathbb{E}[T] + \mu_d^2\mathbb{E}[T^2]
-			\\
-			& =  \sigma_d^2 \mu_\ell + \mu_d^2\left(Var(T) + (\mathbb{E}[T])^2\right)
-			\\
-			& = \sigma_d^2 \mu_\ell + \mu_d^2\left(\sigma^2_\ell+ \mu_\ell^2\right).
-	\end{align*}
-Finally,
-	\begin{align*}
-		Var(D(T)) &= \mathbb{E}[D^2(T)] - \big(\mathbb{E}[D(T)]\big)^2
-		\\
-		& =  \sigma_d^2 \mu_\ell + \mu_d^2\left(\sigma^2_\ell+ \mu_\ell^2\right) - (\mu_d \mu_\ell)^2
-		\\
-		& = \sigma_d^2 \mu_\ell + \mu_d^2 \sigma^2_\ell.
-	\end{align*}
-\end{proof}
-\clearpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Binomal approx to Poisson}
+%
+%	Probability Theory
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Probability Theory}
+\subsection{Some ole' Binomal shits}
+\subsubsection{Binomal approx to Poisson}
 \begin{Theorem}\label{binom_approx_poisosn}
 	For $\lambda = np $,
 	$$ \lim_{n  \to \infty} \binom{n}{k} p^k {1 - p}^{n - k} = \frac {\lambda^k} {k!} e^{-\lambda}$$
@@ -225,7 +184,7 @@ First, we need the following lemma
 		\\
 		& =  \frac{1}{\Gamma(k+1)}\lim_{n \to \infty} \sqrt{\frac{n}{n-k}} \left(\frac{n}{e}\right)^n \left(\frac{e}{n-k}\right)^{n-k} \frac{1}{n^k}.
 	\end{align*}
-	Where we used the Stirling's Formula for Gamma function in the last equality.
+	Where we used the first order of Stirling's Formula for Gamma function in the last equality.
 	
 	Next, we only need to prove the limit equals to $1$:
 	\begin{align*}
@@ -332,6 +291,61 @@ which implies
 \]
 Substituting this back, we obtained the desired equation.
 \end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	Operational Research
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Operational Research}
+
+\subsection{Safety Stock}
+\begin{Theorem}
+	Let the lead-time $T$ be normally distributed, i.e. $T\sim N(\mu_\ell, \sigma^2_\ell)$ and denote the set of demand of period $i$ as $\{D_i\}_{i=1}^T$ where $D_i \sim N(\mu_d, \sigma^2_d)$ for each $1\leq i \leq T$. Then the safety stock level, $SS$ satisifies the following equation
+	\[
+	SS = z_\alpha \sqrt{\sigma_d^2 \mu_\ell + \mu_d^2 \sigma^2_\ell},
+	\]
+	where $z_\alpha$ is the Z-value of a desired $\alpha$ which is chosen.
+\end{Theorem}
+
+\begin{proof}
+	Denote the demand between within lead-time as $D(T) := \sum_{i=1}^T D_i$. The safety stock level is then set at
+	\[
+	SS = z_\alpha \sqrt{Var(D(T))}.
+	\]
+	Thus we need only to prove $Var(D(T))$. 
+	
+	From Towering-property, note that 
+	\begin{align*}
+		\mathbb{E}[D(T)] & = \mathbb{E} \big[\mathbb{E}[D(T)|T]\big]\\
+		&
+		= \mathbb{E}\big[T \mu_d\big] = \mu_d \mathbb{E}[T] = \mu_d \mu_\ell.
+	\end{align*}
+	Furthemore, again with Towering-property, we have
+	\begin{align*}
+		\mathbb{E}[D^2(T)] & = \mathbb{E} \big[\mathbb{E}[D^2(T)|T]\big]
+		\\
+		& = \mathbb{E}\big[Var[D(T)|T] + \big(\mathbb{E}[D(T)|T]\big)^2\big]
+		\\			
+		& = \mathbb{E}\big[T \sigma_d^2 + \big(T \mu_d \big)^2\big]
+		\\
+		& = \sigma_d^2 \mathbb{E}[T] + \mu_d^2\mathbb{E}[T^2]
+		\\
+		& =  \sigma_d^2 \mu_\ell + \mu_d^2\left(Var(T) + (\mathbb{E}[T])^2\right)
+		\\
+		& = \sigma_d^2 \mu_\ell + \mu_d^2\left(\sigma^2_\ell+ \mu_\ell^2\right).
+	\end{align*}
+	Finally,
+	\begin{align*}
+		Var(D(T)) &= \mathbb{E}[D^2(T)] - \big(\mathbb{E}[D(T)]\big)^2
+		\\
+		& =  \sigma_d^2 \mu_\ell + \mu_d^2\left(\sigma^2_\ell+ \mu_\ell^2\right) - (\mu_d \mu_\ell)^2
+		\\
+		& = \sigma_d^2 \mu_\ell + \mu_d^2 \sigma^2_\ell.
+	\end{align*}
+\end{proof}
+\clearpage
 
 
 
