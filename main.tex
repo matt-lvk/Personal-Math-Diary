@@ -193,13 +193,68 @@ Finally,
 	\end{align*}
 \end{proof}
 \clearpage
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Binomal approx to Poisson}
-\begin{Theorem}
+\begin{Theorem}\label{binom_approx_poisosn}
 	For $\lambda = np $,
 	$$ \lim_{n  \to \infty} \binom{n}{k} p^k {1 - p}^{n - k} = \frac {\lambda^k} {k!} e^{-\lambda}$$
 \end{Theorem}
 
+First, we need the following lemma
+\begin{Lemma}\label{inf_binom_over_power}
+	Let $\Gamma(x) = \int_0^\infty t^{x-1} e^{-t} \dd{t}$ be the Gamma function, then the following equation holds
+	\[
+		\lim_{n \to \infty} \frac{\binom{n}{k}}{n^k} = \frac{1}{k!}.
+	\]
+\end{Lemma}
+
+\begin{proof}[Proof of Lemma \ref{inf_binom_over_power}]
+	Note first that
+		\[
+			\Gamma(k+1) = k \Gamma(k) = \dots = k!\Gamma(1) = k!.
+		\]
+	and \textit{Stirling's Formula for Gamma function} states that
+		\[
+			\Gamma(x+1) = \sqrt{2\pi x} x^x e^{-x} \left(1 + \frac{1}{12x} \cdots \right).
+		\]
+	Then we have
+	\begin{align*}
+		\lim_{n \to \infty} \frac{\binom{n}{k}}{n^k} & = \lim_{n \to \infty} \frac{n!}{n^k (n-k)! k!}
+		\\
+		& =  \lim_{n \to \infty} \frac{\Gamma(n+1)}{n^k \Gamma(n-k+1) \Gamma(k+1)}
+		\\
+		& =  \frac{1}{\Gamma(k+1)}\lim_{n \to \infty} \sqrt{\frac{n}{n-k}} \left(\frac{n}{e}\right)^n \left(\frac{e}{n-k}\right)^{n-k} \frac{1}{n^k}.
+	\end{align*}
+	Where we used the Stirling's Formula for Gamma function in the last equality.
+	
+	Next, we only need to prove the limit equals to $1$:
+	\begin{align*}
+		\lim_{n \to \infty} \sqrt{\frac{n}{n-k}} \left(\frac{n}{e}\right)^n \left(\frac{e}{n-k}\right)^{n-k} \frac{1}{n^k} & = \sqrt{\frac{n}{n-k}} \frac{1}{e^k} \frac{(1-k/n)^k}{(1-k/n)^n}
+		\\
+		& = 1, 
+	\end{align*}
+	since
+	\begin{align*}
+		\sqrt{\frac{n}{n-k}} & \to 1,\\
+		(1-k/n)^k &\to 1,\\
+		\frac{(1-k/n)^k}{(1-k/n)^n} &\to e^{-k},
+	\end{align*}
+	as $n \to \infty$.
+\end{proof}
+Now we may prove the main theorem
+\begin{proof}[Proof of Theorem \ref{binom_approx_poisosn}]
+	Let $ p = \gamma/n$ and fix $k$, we have
+	\begin{align*}
+		\lim_{n \to \infty} \frac{\binom{n}{k}}{n^k} & = \lim_{n \to \infty} \binom{n}{k} \left(\frac{\gamma}{k}\right)^k\left(1 - \frac{\gamma}{n}\right)^{n-k}
+		\\
+		& = \lim_{n \to \infty} \frac{n^k}{k!} \left(\frac{\gamma}{k}\right)^k \left( 1 - \frac{\gamma}{n} \right)^{n-k} \quad \text{by Lemma \ref{inf_binom_over_power}}
+		\\
+		& = \frac{\gamma^k}{k!} \left[ \lim_{n \to \infty} \left(1 - \frac{\gamma}{n}\right)^n \right] \left[\lim_{n \to \infty} \left(1 - \frac{\gamma}{n}\right)^k \right]
+		\\
+		& = \frac{\gamma^k}{k!} e^{-\gamma} ( 1)
+	\end{align*}
+\end{proof}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Gambler's Ruin}
 Let $p$ is the probability of winning $\$1$ and $q = 1 - p$ is the probability of losing $\$1$. Suppose that a person starts with $\$i$ amount of money where $0 < i < N$ and $N \in \N$ is the number he would want to walk away with. The probability of him winning from this starting position is given by the following equation:
 	\[ a_k =
