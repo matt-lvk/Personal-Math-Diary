@@ -5,6 +5,7 @@
 \usepackage[left=1.5cm,right=1.5cm,top=3cm,bottom=3cm]{geometry}
 \geometry{verbose}
 
+
 %\usepackage{newtxtext}
 \usepackage{enumitem}
 \setenumerate[1]{leftmargin=3em}
@@ -57,7 +58,7 @@
 
 \theoremstyle{remark}
 \newtheorem{Remark}{Remark}[section]
-
+\newtheorem{Example}{Example}[section]
 \theoremstyle{plain}
 \newtheorem{Theorem}{Theorem}[section]
 \newtheorem{Lemma}{Lemma}[section]
@@ -300,13 +301,202 @@ which implies
 Substituting this back, we obtained the desired equation.
 \end{proof}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	Time Series
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\clearpage
+\section{Time Series}
+
+\subsection{Stationary and Autocorrelation}
+
+\begin{Definition}
+	The \textbf{autocovariance} $$\gamma (s,t) := \mathds{E} \left[(x_s - \mu_s) (x_t-\mu_t)\right],$$ and \textbf{cross-covar.} $$\rho_{x,y}(s,t):= \mathds{E}\left[(x_s - \mu_{xs})(y_t - \mu_{ts})\right].$$
+\end{Definition}
+
+\begin{Definition}
+	The \textbf{autocorrelation function} (ACF) is defined as
+	\[
+	\rho_{x} (s,t)  := \frac{\gamma(s,t)}{\sqrt{\gamma(s,s)\gamma(t,t)}},
+	\]
+\end{Definition}
+
+\textbf{Notation}: $\rho_{x}(t, t+h)  \equiv \rho(h)$.
+
+\begin{Definition}[Strictly stationary]
+	For all $k \in \N$, $t_k \in \N$ and $c_k \in \R$. Then the time series is strictly stationary if
+	\[
+	\mathds{P} \big(x_{t_1} \leq c_1, \dots x_{t_k} \leq c_k \big) = \mathds{P} \big(x_{t_1+h} \leq c_1, \dots x_{t_k+h} \leq c_k \big),
+	\]
+	for given probability measure $\mathds{P}$ and constant $h \in \N$.
+\end{Definition}
+\clearpage
+
+\begin{Definition}[Weakly stationary]
+	The time series is strictly stationary if
+	\begin{enumerate}
+		\item $\mu_t = \mathds{E}[x_t]$ is constant, and
+		
+		\item $\gamma(s,t)$ depends only on $|s-t|$. 
+	\end{enumerate}
+\end{Definition}
+
+
+\begin{Lemma}
+	Assume time series is weakly stationary. Using the notation $\gamma (t, t+h) \equiv \gamma (h)$, we have
+	\begin{enumerate}
+		\item $|\gamma (t)| \leq \gamma(0)$,
+		
+		\item $\gamma(h) = \gamma(-h)$.
+	\end{enumerate}
+\end{Lemma}
+
+\begin{proof}
+	\begin{enumerate}
+		\item By Cauchy-Schwarz inequality $|\gamma (t, t+h)|^2 \leq \gamma(t,t) \gamma(t+h,t+h)$ by definition $|\gamma(h)|^2 \leq \gamma(0) \gamma(0)$.
+		
+		\item From definition of covariance we have
+		\begin{align*} 
+			\gamma(h) &= \gamma(t+h-t)\\
+			& = \mathds{E}\left[(x_{t+h}-\mu)(x_t - \mu)\right]\\
+			& = \mathds{E}\left[(x_t - \mu)(x_{t+h}-\mu)\right]\\
+			& = \gamma(t-(t+h)) = \gamma(-h)
+		\end{align*}
+	\end{enumerate}
+\end{proof}
+
+\begin{Example}
+	Suppose $w_t$ for all $t\in N$ is white noise process, i.e. iid $w_t \approx N(0, \sigma_w^2)$. Given two series
+	\begin{align*}
+		x_t &= w_t + w_{t-1},\\
+		y_t &= w_t - w_{t-1}.
+	\end{align*}
+	Then for any $h\in \N$, we get the following for (cross-)covariance:
+	\begin{enumerate}
+		\item \begin{align*}
+			\gamma_x(0) &= \mathds{E}[(w_t + w_{t-1})^2] =  \mathds{E}[w_t^2] + \mathds{E}[w_{t-1}^2] + 2\underbrace{ \mathds{E}[w_t w_{t-1}]}_{=0}\\
+			& = 2\sigma_w^2,
+			\\
+			\gamma_y(0) &= \mathds{E}[(w_t - w_{t-1})^2] =  \mathds{E}[w_t^2] + \mathds{E}[w_{t-1}^2] - 2\underbrace{ \mathds{E}[w_t w_{t-1}]}_{=0}\\
+			& = 2\sigma_w^2.
+		\end{align*}
+		\item 
+		\begin{align*}
+			\gamma_x (1) &= \mathds{E}\left[(w_t + w_{t-1}) (w_{t+1} + w_t) \right] \\
+			& = \mathds{E}[w_tw_{t+1}] + \mathds{E}[w_t^2] + \mathds{E}[w_{t-1} w_{t+1}] + \mathds{E}[w_{t-1}w_t]\\
+			& = \sigma_w = \gamma_x(-1),
+			\\
+			\gamma_y (1) &=  \mathds{E}[w_tw_{t+1}] - \mathds{E}[w_t^2] + \mathds{E}[w_{t-1} w_{t+1}] - \mathds{E}[w_{t-1}w_t]\\
+			&  = - \sigma_w = \gamma_y(-1).
+		\end{align*}
+		
+		\item $\gamma_{xy}(0) =  \mathds{E}[w_t^2]  -  \mathds{E}[w_{t-1}^2]  = 0$ and $\gamma_{xy} (1) = cov (x_{t+1}, y_t) = -\sigma_w^2$ and $\gamma_{xy} (-1) = cov (x_{t}, y_{t-1}) = -\sigma_w^2$
+		
+		\item ACF
+		\begin{equation}
+			\rho_{xy} (h) = 
+			\begin{cases}
+				0 & h=0,\\
+				1/2 & h=1,\\
+				-1/2 & h=-1,\\
+				0 & |h| \geq 2
+			\end{cases}
+		\end{equation}
+		Thus the joint time series is stationary.
+	\end{enumerate}
+\end{Example}
+
+\begin{Definition}[Linear Process]
+	$\{x_t\}$ is linear process if 
+	\[
+	x_t = \mu + \sum_{j=-\infty}^\infty \psi_j w_{t-j}, \quad \sum_{j=-\infty}^\infty |\psi_j|< \infty,
+	\]
+	where $w_t$ is white noise.
+\end{Definition}
+
+\begin{Definition}[Gaussian Process]
+	$\{x_t\}$ is Gaussian process if the vector $x := (x_{t_1}, x_{t_2},\dots, x_{t_n})' \in \R^n$ has a multivariate normal distribution with density function
+	\[
+	f(x) = \frac{1}{(2\pi)^{n/2}} \det\big(\Gamma\big)^{-1/2} \exp \left(-\frac{1}{2} (x-\mu)' \Gamma^{-1} (x-\mu) \right),
+	\]
+	where $\mu \in \R^n$ and $\Gamma:= var (x) = \left\{ \gamma(t_i, t_j);\ i,j=1,\dots,n\right\}$.
+\end{Definition}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%			ARIMA
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{ARIMA}
+$ARMA(p,q)$: 
+\[
+x_t - \phi_1 x_{t-1} - \dots - \phi_p x_{t-p} = w_t + \theta_t w_{t-1} + \dots + \theta_q w_{t-q}.
+\]
+
+\section{Autoregressive Model}
+
+\begin{Definition}[$AR(p)$]
+	Let $w_t$ be white noise, $AR(p)$ is defined as 
+	\[
+	x_t - \phi_1 x_{t-1} - \cdots - \phi_p x_{t-p} = w_t.
+	\]
+\end{Definition}
+
+\begin{Definition}[Autoregressive Operator]
+	Let $B$ be time-lagged operator, i.e. $Bx_t = x_{t-1}$, the autoregressive operator is defined as
+	\[
+	\phi(B) = 1-\phi_1 B - \phi_2 B^2 - \cdots - \phi_p B^p.
+	\]
+\end{Definition}
+
+\begin{Example}
+	Assuming  $\phi_j = \phi$ for all $j \in \N$, from AR(1)
+	\begin{align*}
+		x_t & = \phi x_{t-1} + w_t = \phi(\phi x_{t-2} + w_{t-1}) + w_t\\
+		& =  \phi^2 x_{t-2}  + \phi w_{t-1} + w_t\\
+		& \vdots\\
+		& = \phi^k x_{t-k} + \sum_{j=0}^{k-1} \phi^j w_{t-j}.
+	\end{align*}
+	Thus, if $|\phi| < 1$ and $x_t$ is sationary then for large $k\to\infty$, we have
+	\[
+	x_t = \sum_{j=0}^\infty \phi^j w_{t-j}.
+	\]
+	Taking expectation value,
+	\[
+	\mathds{E}[x_t] = \sum_{j=0}^\infty	 \phi_j \mathds{E}[w_t] = 0.
+	\]
+	Moreover, for $h\geq $ the autocovriance function is
+	\begin{align*}
+		\gamma(h) &= \mathds{E} \left[\left(\sum_{j=0}^\infty \phi^j w_{t+h-j} \right) \left(\sum_{j=0}^\infty \phi^k w_{t-k} \right)\ \right]\\
+		& = \mathds{E} \big[(w_{t+h-1}+ \phi w_{t+h-2} + \cdots \phi^h w_{t} + \phi^{h+1} w_{t-1} + \cdots ) (w_t + \phi w_{t-1}+ \cdots)\big]\\
+		& = \sigma_w^2 \sum_{j=0} \phi^{h+j} \phi^j = \sigma_w^2 \phi^h \sum_{j=0} \phi^{2j}\\
+		& = \frac{\sigma_w^2 \phi^h}{1-\phi^{2}}.
+	\end{align*}
+	And ACF is
+	\[
+	\rho(h) = \frac{\gamma(h)}{\gamma(0)} = \phi^h.
+	\]
+	As well as
+	\[
+	\rho(h)  =\phi \rho(h-1).
+	\]
+\end{Example}
+
+\begin{Definition}
+	The \textbf{moving average operator} is defined as
+	\[
+	\theta(B) : = 1 + \theta_1 B + \theta_2 B^2 + \cdots + \theta_q B^q.
+	\]
+\end{Definition}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 %	Operational Research
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\clearpage
 \section{Operational Research}
+
 
 \subsection{Safety Stock}
 \begin{Theorem}
