@@ -153,6 +153,14 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Probability Theory}
 \subsection{Some ole' Binomal shits}
+\subsubsection{Expected value and variance of Binomial}
+\begin{Theorem}\label{binom_exp_var}
+	Let $X \approx Bin(n,p)$, then the expected value and variance is given by
+	\begin{enumerate}
+		\item $\mathbb{E}(X) = np$,
+		\item $Var(X) = np(1-p)$.
+	\end{enumerate}
+\end{Theorem}
 \subsubsection{Binomal approx to Poisson}
 \begin{Theorem}\label{binom_approx_poisosn}
 	For $\lambda = np $,
@@ -188,7 +196,7 @@ First, we need the following lemma
 	
 	Next, we only need to prove the limit equals to $1$:
 	\begin{align*}
-		\lim_{n \to \infty} \sqrt{\frac{n}{n-k}} \left(\frac{n}{e}\right)^n \left(\frac{e}{n-k}\right)^{n-k} \frac{1}{n^k} & = \sqrt{\frac{n}{n-k}} \frac{1}{e^k} \frac{(1-k/n)^k}{(1-k/n)^n}
+		\lim_{n \to \infty} \sqrt{\frac{n}{n-k}} \left(\frac{n}{e}\right)^n \left(\frac{e}{n-k}\right)^{n-k} \frac{1}{n^k} & = \lim_{n \to \infty} \sqrt{\frac{n}{n-k}} \frac{1}{e^k} \frac{(1-k/n)^k}{(1-k/n)^n}
 		\\
 		& = 1, 
 	\end{align*}
