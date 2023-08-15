@@ -165,7 +165,7 @@
 \subsubsection{Binomal approx to Poisson}
 \begin{Theorem}\label{binom_approx_poisosn}
 	For $\lambda = np $,
-	$$ \lim_{n  \to \infty} \binom{n}{k} p^k {1 - p}^{n - k} = \frac {\lambda^k} {k!} e^{-\lambda}$$
+	$$ \lim_{n  \to \infty} \binom{n}{k} p^k {(1 - p)}^{n - k} = \frac {\lambda^k} {k!} e^{-\lambda}$$
 \end{Theorem}
 
 First, we need the following lemma
@@ -225,7 +225,7 @@ Now we may prove the main theorem
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Gambler's Ruin}
 Let $p$ is the probability of winning $\$1$ and $q = 1 - p$ is the probability of losing $\$1$. Suppose that a person starts with $\$i$ amount of money where $0 < i < N$ and $N \in \N$ is the number he would want to walk away with. The probability of him winning from this starting position is given by the following equation:
-	\[ a_k =
+	\[ a_i =
 		\begin{cases}
 			\frac{1-\left(\frac{q}{p}\right)^i}{1 - \left(\frac{q}{p}\right)^N} \quad & \text{where } p \neq q,\\
 			\frac{i}{N}  &  \text{where } p = q = \frac{1}{2}.
@@ -259,25 +259,25 @@ Let $p$ is the probability of winning $\$1$ and $q = 1 - p$ is the probability o
 	\begin{align*}
 		a_i  &= p a_{i+1} + q a_{i-1} \\
 		\underbrace{(p + q)}_{=1}  a_i &= p a_{i+1} + q a_{i-1} \\
-		 a_{i+1} - a_i & = \frac{p}{q} (a_i - a_{i-1}).
+		 a_{i+1} - a_i & = \frac{q}{p} (a_i - a_{i-1}).
 	\end{align*}
 Denote $b_j := a_i - a_{i-1}$ and note that $b_1 = a_1$ since $a_0 = 0$ is the absorption edge, we deduce by recursion that
 	\[
-		b_{i + 1} =  \left(\frac{p}{q}\right)^{i+1} a_1.
+		b_{i + 1} =  \left(\frac{q}{p}\right)^{i+1} a_1.
 	\]
 Moreover, note that
 	\begin{align*}
 		a_{i+1}  - a_1 &= \sum_{i}^{k = 1} a_{k+1} - a_k 
 		\\
-		& = \sum_{k=1}^i \left(\frac{p}{q}\right)^k a_1.
+		& = \sum_{k=1}^i \left(\frac{q}{p}\right)^k a_1.
 		\\
-		\Rightarrow a_{i+!}  &= a_1 \left(1+\sum_{k=1}^i \left(\frac{p}{q}\right)^k  \right)
+		\Rightarrow a_{i+1}  &= a_1 \left(1+\sum_{k=1}^i \left(\frac{q}{p}\right)^k  \right)
 		\\
-		& = a_1 \left(\sum_{k=0}^i \left(\frac{p}{q}\right)^k  \right).
+		& = a_1 \left(\sum_{k=0}^i \left(\frac{q}{p}\right)^k  \right).
 	\end{align*}
 If $p\neq q$, by geometric series, we obtain
 	\[
-		a_{i+1} = a_1 \frac{1- \left(\frac{p}{q}\right)^{i+1} }{1- \left(\frac{p}{q}\right)}.
+		a_{i+1} = a_1 \frac{1- \left(\frac{q}{p}\right)^{i+1} }{1- \left(\frac{q}{p}\right)}.
 	\]
 If $ p = q = 0.5$, then
 	\[
@@ -287,7 +287,7 @@ If $ p = q = 0.5$, then
 Now to solve for $a_1$, observe that since at absoprtion point $a_N = 1$, then letting $i + 1 = N$, we get
 	\[ 1 = a_N =
 \begin{cases}
-	\frac{1-\left(\frac{q}{p}\right)^N}{1 - \left(\frac{q}{p}\right)} \quad & \text{where } p \neq q,\\
+	a_1 \frac{1-\left(\frac{q}{p}\right)^N}{1 - \left(\frac{q}{p}\right)} \quad & \text{where } p \neq q,\\
 	a_1 N  &  \text{where } p = q = \frac{1}{2},
 \end{cases}
 \]
