@@ -93,10 +93,12 @@
 \DeclareMathOperator{\RePart}{Re}
 \DeclareMathOperator{\diag}{diag}
 \DeclareMathOperator{\supp}{supp}
+\DeclareMathOperator{\Var}{Var}
 
 \def \qed {\hfill \vrule height6pt width 6pt depth 0pt}
 \newcommand{\al}{\alpha}
 \newcommand{\R}{\mathbb{R}}
+\newcommand{\E}{\mathbb{E}}
 \newcommand{\N}{\mathbb{N}}
 \newcommand{\Z}{\mathbb{Z}}
 \newcommand{\C}{\mathbb{C}}
@@ -153,13 +155,13 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Probability Theory}
-\subsection{Some ole' Binomal shits}
+\subsection{Some ole' Binomal}
 \subsubsection{Expected value and variance of Binomial}
 \begin{Theorem}\label{binom_exp_var}
 	Let $X \approx Bin(n,p)$, then the expected value and variance is given by
 	\begin{enumerate}
 		\item $\mathbb{E}(X) = np$,
-		\item $Var(X) = np(1-p)$.
+		\item $\Var(X) = np(1-p)$.
 	\end{enumerate}
 \end{Theorem}
 \subsubsection{Binomal approx to Poisson}
@@ -223,7 +225,8 @@ Now we may prove the main theorem
 	\end{align*}
 \end{proof}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Gambler's Ruin}
+\subsection{Markov Chain}
+\begin{Theorem}[Gambler's ruin]\label{gambler_ruin}
 Let $p$ is the probability of winning $\$1$ and $q = 1 - p$ is the probability of losing $\$1$. Suppose that a person starts with $\$i$ amount of money where $0 < i < N$ and $N \in \N$ is the number he would want to walk away with. The probability of him winning from this starting position is given by the following equation:
 	\[ a_i =
 		\begin{cases}
@@ -231,7 +234,7 @@ Let $p$ is the probability of winning $\$1$ and $q = 1 - p$ is the probability o
 			\frac{i}{N}  &  \text{where } p = q = \frac{1}{2}.
 		\end{cases}
 	\]
-	
+\end{Theorem}
 \begin{proof}
 	Note that
 		\tikzstyle{level 1}=[level distance=3.5cm, sibling distance=3.5cm]
@@ -301,6 +304,40 @@ which implies
 Substituting this back, we obtained the desired equation.
 \end{proof}
 
+\begin{Corollary}
+	The expectation of stopping time with respect to Brownian motion, i.e. 
+	$
+		\tau = \inf \{t \geq 0:\ B_\tau \in \{ - \alpha, \beta\} \},
+	$
+	for any positive integer $\alpha$ and $\beta$ is given by 
+	\[
+		\mathbb{E}[\tau] = \alpha \beta.
+	\]
+\end{Corollary}
+
+\begin{proof}
+	From Theorem \eqref{gambler_ruin} we observe that $\Pr(B_\tau = b) = \frac{a}{a+b}$. Then, note that since $1 = \Pr(B_\tau = -\alpha) + \Pr(B_\tau = \beta) $, we have
+	\[
+		\Pr(B_\tau =  - \alpha) = \frac{b}{a+b}.
+	\]
+	 Since $(B_t^2 - t)_{t \geq 0}$ is a martingale, we by apply Optimal Stopping Theorem where
+	\[
+		0 = \mathbb{E}[B_0^2 - 0] = \mathbb{E} [B_\tau^2 - \tau], 
+	\]
+	which implies
+	\[
+	\mathbb{E}[\tau] = \E[B_\tau^2 ] =  \alpha^2 	\Pr(B_\tau =  - \alpha) + \beta^2 	\Pr(B_\tau =  \beta) = \alpha \beta.
+	\]
+\end{proof}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	Financial Mathematis
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\clearpage
+\section{Financial Mathematics}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 %	Time Series
@@ -331,7 +368,7 @@ Substituting this back, we obtained the desired equation.
 	\]
 	for given probability measure $\mathds{P}$ and constant $h \in \N$.
 \end{Definition}
-\clearpage
+
 
 \begin{Definition}[Weakly stationary]
 	The time series is strictly stationary if
@@ -432,7 +469,7 @@ $ARMA(p,q)$:
 x_t - \phi_1 x_{t-1} - \dots - \phi_p x_{t-p} = w_t + \theta_t w_{t-1} + \dots + \theta_q w_{t-q}.
 \]
 
-\section{Autoregressive Model}
+\subsection{Autoregressive Model}
 
 \begin{Definition}[$AR(p)$]
 	Let $w_t$ be white noise, $AR(p)$ is defined as 
