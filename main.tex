@@ -207,21 +207,21 @@ First, we need the following lemma
 	\begin{align*}
 		\sqrt{\frac{n}{n-k}} & \to 1,\\
 		(1-k/n)^k &\to 1,\\
-		\frac{(1-k/n)^k}{(1-k/n)^n} &\to e^{-k},
+		(1-k/n)^n &\to e^{-k},
 	\end{align*}
 	as $n \to \infty$.
 \end{proof}
 Now we may prove the main theorem
 \begin{proof}[Proof of Theorem \ref{binom_approx_poisosn}]
-	Let $ p = \gamma/n$ and fix $k$, we have
+	Let $ p = \lambda/n$ and fix $k$, we have
 	\begin{align*}
-		\lim_{n \to \infty} \frac{\binom{n}{k}}{n^k} & = \lim_{n \to \infty} \binom{n}{k} \left(\frac{\gamma}{k}\right)^k\left(1 - \frac{\gamma}{n}\right)^{n-k}
+		\lim_{n \to \infty} \frac{\binom{n}{k}}{n^k} & = \lim_{n \to \infty} \binom{n}{k} \left(\frac{\lambda}{n}\right)^k\left(1 - \frac{\gamma}{n}\right)^{n-k}
 		\\
-		& = \lim_{n \to \infty} \frac{n^k}{k!} \left(\frac{\gamma}{k}\right)^k \left( 1 - \frac{\gamma}{n} \right)^{n-k} \quad \text{by Lemma \ref{inf_binom_over_power}}
+		& = \lim_{n \to \infty} \frac{n^k}{k!} \left(\frac{\lambda}{n}\right)^k \left( 1 - \frac{\lambda}{n} \right)^{n-k} \quad \text{by Lemma \ref{inf_binom_over_power}}
 		\\
-		& = \frac{\gamma^k}{k!} \left[ \lim_{n \to \infty} \left(1 - \frac{\gamma}{n}\right)^n \right] \left[\lim_{n \to \infty} \left(1 - \frac{\gamma}{n}\right)^k \right]
+		& = \frac{\lambda^k}{k!} \left[ \lim_{n \to \infty} \left(1 - \frac{\lambda}{n}\right)^n \right] \underbrace{\left[\lim_{n \to \infty} \left(1 - \frac{\lambda}{n}\right)^{-k} \right]}_{=1}
 		\\
-		& = \frac{\gamma^k}{k!} e^{-\gamma} ( 1)
+		& = \frac{\lambda^k}{k!} e^{-\lambda}.
 	\end{align*}
 \end{proof}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
