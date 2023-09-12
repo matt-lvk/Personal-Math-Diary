@@ -338,6 +338,36 @@ Substituting this back, we obtained the desired equation.
 \clearpage
 \section{Financial Mathematics}
 
+\subsection{Girsanov Theorem}
+\begin{Theorem}
+	Denote
+	\[
+		\eta_t := \exp(-\int_0^t \lambda(u) \dd{W^\mathbb{P}(u)} - \frac{1}{2} \int_0^t \lambda^2(u) \dd{u}), 
+	\]
+	where $W^\mathbb{P}(t)$ is Wiener process under $\mathbb{P}$ and $\lambda(t) $ is $\mathcal{F}_t$-measurable to be chosen. Then we can have the following Wiener process under arbitrage-free Wiener process $W^\mathbb{Q}(t)$ defined by
+	\[
+		W^\mathbb{Q}(t) = W^\mathbb{P}(t) + \int_0^t \lambda(u) \dd{u}. 
+	\]
+	The measure $\mathbb{Q}$ is defined by 
+	\[
+	\mathbb{Q}[A] = \int_A \eta_t \dd{P},
+	\]
+	where $A \in \mathcal{F}_t$.
+\end{Theorem}
+
+Thus, choosing $\lambda(t) = \frac{\mu - r}{\sigma}$, the discounted risk neutral process can be expressed as
+	\begin{align*}
+		\frac{\dd{S_t}}{B_t} & = (\mu - r) \dd{t} + \sigma \dd{W^\mathbb{P}}
+		\\
+		& = (\mu - r) \dd{t} + \sigma \big[\dd{W^\mathbb{Q}} - \lambda(t) \dd{t} \big]
+		\\
+		& = \sigma \dd{W^\mathbb{Q}},
+	\end{align*}
+which is a Martingale.
+
+\begin{Remark}
+	Since choice of $\lambda(t)$ is unique here to generate a Martingle process, $\mathbb{Q}$ is known as unique equivalent martingale (EMM) which equals to say that $\mathbb{Q}$ is a risk-neutral measure.
+\end{Remark}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 %	Time Series
