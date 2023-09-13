@@ -402,9 +402,9 @@ which is a Martingale.
 
 
 \subsection{Black-Scholes}
-Suppose the call-option
+Suppose the call-option value process (admissible, BS is closed and whole other assumptinos)
 \[
-	C(S_t) = \max \{0, S_t - K\}.
+	C(S_t) = V_t((S_T-K)^+).
 \]
 From Ito lemma, we have
 \begin{align*}
@@ -432,6 +432,113 @@ For no arbitrage, there is no drift term, so the Black-Scholes equation equals t
 	\pdv{C}{t}  + r S_t \pdv{C}{S_t} + \frac{1}{2}  \sigma^2 S_t^2 \pdv[2]{C}{S_t} -rC = 0
 \end{equation}
 
+Next, we derive the price of European vanilla options
+\begin{Proposition}\label{BS_0}
+	Let $g(0,\infty) \to \R_+$ be a claim such that $g(x) \leq c(1+x)$ for some $c\geq 0$ and $X = g(S_T)$. Then the value process $(V_t(X))_{t\in[0,T]}$ satisfies $V_t(X) = \nu(t,S_t)$ where
+	\begin{equation}\label{option_v}
+		\nu(t,x) = e^{-r(T-t)} \int_\R g(e^y) \phi_{\log(x)+ (T-t)(r-\sigma^2/2),\ \sigma^2(T-t)} (y) \dd{y},
+	\end{equation}
+	and $\varphi(\mu, \sigma^2)$ is the probability density function of normal distribution i.e.
+	\[
+	\phi(\mu, \sigma^2)(y) := \frac{1}{\sqrt{2\pi \sigma^2}} \exp(-\frac{(\mu -y)^2}{2\sigma^2}).
+	\]
+\end{Proposition}
+
+\begin{proof}
+	From discounted process we have
+	\begin{align*}
+		\hat{V}_t(X) &= \E^Q [\hat{X}|\mathcal{F}_t] 
+		\\
+		& = e^{-rT}  \E^Q [g(S_T)|\mathcal{F}_t] 
+		\\
+		& =  e^{-rT}  \E^Q \left[g \left( S_t \exp(\left(r - \frac{\sigma^2}{2}\right)(T-t) + \sigma(W_T - W_t))  \right)\mid \mathcal{F}_t\right]
+		\\
+		& = e^{-rT}  \E^Q \left[g \left( \exp(\log(S_t) + \left(r - \frac{\sigma^2}{2}\right)(T-t) + \sigma(W_T - W_t))  \right)\mid \mathcal{F}_t\right], 
+	\end{align*}
+	where we used the solution to the Stochastic GBM. Note here that $(W_T - W_t) \sim \mathcal{N}(0, T-t)$. Thus, we have 
+	\begin{align*}
+		\hat{V}_t(X) &= \E^Q [\hat{X}|\mathcal{F}_t] 
+		\\
+		& = e^{-rT}  \int_\R g \left( \exp(\log(S_t) + \left(r - \frac{\sigma^2}{2}\right)(T-t) + \sigma {\color{red} y})  \right) \phi_{0, T-t} (y) \dd{y}
+		\\
+		& =  e^{-rT}  \int_\R g(e^z)  \phi_{\log(x)+ (T-t)(r-\sigma^2/2),\ \sigma^2(T-t)} (z) \dd{z}.
+	\end{align*}
+	Finally, observe that the discounted value process is given by $\hat{V}_t(X) = e^{-rt} V_t(X)$ then we are done.
+\end{proof}
+
+\begin{Theorem}[Call option pricing]\label{BS_Call}
+	Let $C(S_t, t) := V_t((S_T-K)^+)$ value process of the call option, then we have
+	\begin{equation}
+		C(S_t, t) = S_t \Phi(d_1) - K e^{-r(T-t)} \Phi(d_2),
+	\end{equation}
+	where $\Phi(x)\ (\mathbb{P} (X < x) )$ is the distribution of standard normal distribution $\mathcal{N}(0,1)$ and
+	\begin{align*}
+		d_1 & := \frac{1}{\sigma \sqrt{T-t}} \left(\log(\frac{S_t}{K}) + (r+\sigma^2/2)(T-t) \right),\\
+		d_2 & := d_1 - \sigma \sqrt{T-t}.
+	\end{align*}
+\end{Theorem}
+
+\begin{proof}
+	Let $g(x) = (x-K)^+$ then from Proposition \ref{BS_0}, we get
+	\begin{align*}
+	C(S_t,t) & = V_t((S_t-K)^+) \\
+	& = e^{-r(T-t)} \int_\R \underbrace{(e^y-K)^+}_{=g(e^y)}  \phi_{\log(S_t)+ (T-t)(r-\sigma^2/2),\ \sigma^2(T-t)} (y) \dd{y}
+	\\
+	& = e^{-r(T-t)} \int_\R \left(x \exp(\left(r-\frac{\sigma}{2}\right)(T-t) + \sigma\sqrt{T-t}{\color{red}z}) - K\right)^+ \phi_{0,1}(z) \dd{z},
+	\end{align*}
+	where $x = S_t$.
+	
+	Let
+	\begin{align*}
+		\tau & := T-t,\\
+		\tilde{r} &:= r-\frac{\sigma^2}{2},\\
+		\ell &:= \frac{\log(K/x) - \tilde{r}\tau}{\sigma \sqrt{\tau}}.
+	\end{align*}
+	Thus, we observe that $\left(x \exp(\left(r-\frac{\sigma}{2}\right)(T-t) + \sigma\sqrt{T-t}{\color{red}z}) - K\right)^+$ is non-zero iff
+	\begin{align*}
+		x \exp(\left(r-\frac{\sigma}{2}\right)(T-t) + \sigma\sqrt{T-t}{\color{red}z}) - K  & > 0 \\
+		\Leftrightarrow &\ y > \ell
+	\end{align*}
+	Then
+	\begin{align*}
+		C(S_t,t) & = e^{-r\tau} \int_\ell^\infty \left(x \exp(\tilde{r}\tau + \sigma\sqrt{\tau}{\color{red}z}) - K\right) \phi_{0,1}(z) \dd{z} 
+		\\
+		& = e^{-r\tau} \int_\ell^\infty \left(x \exp(\tilde{r}\tau + \sigma\sqrt{\tau}{\color{red}z}) - K\right) \left(\frac{1}{\sqrt{2\pi}} e^{-\frac{z^2}{2}}\right) \dd{z} 
+		\\
+		& = x \int_\ell^\infty \frac{1}{\sqrt{2\pi}} \exp(-\frac{(z-\sigma\sqrt{\tau})}{2}) \dd{z} - e^{-r\tau} K \Phi(-\ell)
+		\\
+		& = x \int^\infty_{\ell - \sigma\sqrt{\tau}} \frac{1}{\sqrt{2\pi}} e^{-\frac{z^2}{2}} \dd{z}- e^{-r\tau} K \Phi(-\ell)
+		\\
+		& = x \Phi(-\ell + \sigma\sqrt{\tau}) - e^{-r\tau} K \Phi(-\ell)
+	\end{align*}
+\end{proof}
+
+\begin{Theorem}[Replicating strategies]
+	The replicating trading strategy $\varphi = (\varphi^0_t, \varphi^1_t)_{t\in[0,T]}$ of $X$ is given by 
+	\begin{equation}
+		\begin{aligned}
+			\varphi^0_t &= e^{-rt} \left(\nu(S_t,t) - S_t \pdv{x}\nu(S_t,t) \right),\\
+			\varphi^1_t &= \pdv{x} \nu(S_t,t),
+		\end{aligned}
+	\end{equation}
+	where $\nu$ is defined in \eqref{option_v}
+\end{Theorem}
+
+\subsubsection{Put-Call Parity}
+\begin{equation}
+	S_t - Ke^{-r(T-t)} = C(S_t, t) - P(S_t,t).
+\end{equation}
+
+
+\subsubsection{Barrier options}
+Suppose a down-and-out option
+\[
+X : = (S_t - K)^+ \mathds{1}_{\min_{t\in[0,T]}S_t > \beta }
+\]
+The value process is thus,
+\[
+ V_t(X) = e^{-r(T-t)} \E^Q [X|\mathcal{F}_t]
+\]
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
