@@ -337,6 +337,32 @@ Substituting this back, we obtained the desired equation.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \clearpage
 \section{Financial Mathematics}
+Suppose 
+\begin{equation}\label{bgm}
+	\begin{cases}
+	\dd{S_t} &= \mu S_t \dd{t} + \sigma S_t dW_t \\ 
+	S_t \big|_{t=0} &= S_0.
+\end{cases}
+\end{equation}
+
+and risk free is
+\[
+\begin{cases}
+	\dd{B_t} &= r B_t \dd{t} \\ 
+	B_t \big|_{t=0} &= B_0.
+\end{cases}
+\]
+
+Note that the solution to \eqref{bgm} is
+\begin{align*}
+	\dd{\log S_t} & = \frac{1}{S_t} \dd{S_t} - \frac{1}{2} \frac{1}{S^2_t} \left(\dd{S_t}\right)^2
+	\\
+	& = \frac{1}{S_t} \left(\mu S_t \dd{t} + \sigma S_t dW_t \right) - \frac{1}{2} \frac{1}{S^2_t} \big(\sigma^2 S_t^2  \underbrace{\left(\dd{W_t}\right)^2}_{\dd{t}}  + O(dt)\big) 
+	\\
+	& = \bigg(\mu - \frac{1}{2} \sigma^2 \bigg) \dd{t} + \sigma \dd{W_t}.
+	\\
+	\Rightarrow  S_t & = S_0 \exp( (\mu - \frac{1}{2} \sigma^2 ) \dd{t} + \sigma \dd{W_t})
+\end{align*}
 
 \subsection{Girsanov Theorem}
 \begin{Theorem}
@@ -355,19 +381,58 @@ Substituting this back, we obtained the desired equation.
 	where $A \in \mathcal{F}_t$.
 \end{Theorem}
 
+We may also write it as 
+	\begin{equation}
+		\dd{W^\mathbb{Q}} = \dd{W^\mathbb{P}} + \lambda(t) \dd{t}.
+	\end{equation}
+
 Thus, choosing $\lambda(t) = \frac{\mu - r}{\sigma}$, the discounted risk neutral process can be expressed as
 	\begin{align*}
-		\frac{\dd{S_t}}{B_t} & = (\mu - r) \dd{t} + \sigma \dd{W^\mathbb{P}}
+		\dd{\left(\frac{S_t}{B_t}\right)} & = \frac{S_t}{B_t} (\mu - r) \dd{t} + \sigma \dd{W^\mathbb{P}}
 		\\
-		& = (\mu - r) \dd{t} + \sigma \big[\dd{W^\mathbb{Q}} - \lambda(t) \dd{t} \big]
+		& = \frac{S_t}{B_t} (\mu - r) \dd{t} + \sigma \big[\dd{W^\mathbb{Q}} - \lambda(t) \dd{t} \big]
 		\\
-		& = \sigma \dd{W^\mathbb{Q}},
+		& = \frac{S_t}{B_t} \sigma \dd{W^\mathbb{Q}},
 	\end{align*}
 which is a Martingale.
 
 \begin{Remark}
 	Since choice of $\lambda(t)$ is unique here to generate a Martingle process, $\mathbb{Q}$ is known as unique equivalent martingale (EMM) which equals to say that $\mathbb{Q}$ is a risk-neutral measure.
 \end{Remark}
+
+
+\subsection{Black-Scholes}
+Suppose the call-option
+\[
+	C(S_t) = \max \{0, S_t - K\}.
+\]
+From Ito lemma, we have
+\begin{align*}
+	\dd{C(S_t, t)} & = \pdv{C(S_t)}{t}\dd{t} +  \pdv{C(S_t)}{S_t}\dd{S_t} + \frac{1}{2} \pdv[2]{C(S_t)}{S_t}  \left(\dd{S_t}\right)^2
+	\\
+	& = \pdv{C(S_t)}{t}\dd{t}  +  \pdv{C(S_t)}{S_t}\left(r S_t \dd{t} + \sigma S_t dW_t \right) + \frac{1}{2} \pdv[2]{C(S_t)}{S_t}  \sigma^2 S_t^2  \dd{t}
+	\\
+	&
+	= \left(\pdv{C}{t}  + r S_t \pdv{C}{S_t} + \frac{1}{2}  \sigma^2 S_t^2 \pdv[2]{C}{S_t}\right) \dd{t}   + \sigma S_t \pdv{C(S_t)}{S_t} \dd{W_t} .
+\end{align*}
+Moreover, when we consider risk-free bond, we get
+\begin{align*}
+	\dd{\left(\frac{C(S_t,t)}{B_t}\right)} & = C(S_t,t) \dd{\left(\frac{1}{B_t}\right)} + \frac{1}{B_t} \dd{C(S_t,t)}
+	\\
+	& =  -  C(S_t,t) \frac{1}{B^2_t} \dd{B_t} \frac{1}{B_t}  + \frac{1}{B_t} \dd{C(S_t,t)} 
+	\\
+	& = -  C(S_t,t) \frac{r}{B_t} \dd{t} + \frac{1}{B_t} \dd{C(S_t,t)} 
+	\\
+	& = \frac{1}{B_t} \left(\pdv{C}{t}  + r S_t \pdv{C}{S_t} + \frac{1}{2}  \sigma^2 S_t^2 \pdv[2]{C}{S_t} - rC\right) \dd{t} + \sigma \frac{S_t}{B_t}\pdv{C(S_t)}{S_t}  \dd{W_t}  
+\end{align*}
+
+
+For no arbitrage, there is no drift term, so the Black-Scholes equation equals to
+\begin{equation}\label{black_scholes}
+	\pdv{C}{t}  + r S_t \pdv{C}{S_t} + \frac{1}{2}  \sigma^2 S_t^2 \pdv[2]{C}{S_t} -rC = 0
+\end{equation}
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 %	Time Series
@@ -375,6 +440,7 @@ which is a Martingale.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \clearpage
 \section{Time Series}
+
 
 \subsection{Stationary and Autocorrelation}
 
