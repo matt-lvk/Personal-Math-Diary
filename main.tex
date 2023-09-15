@@ -385,8 +385,19 @@ We may also write it as
 	\begin{equation}
 		\dd{W^\mathbb{Q}} = \dd{W^\mathbb{P}} + \lambda(t) \dd{t}.
 	\end{equation}
+\begin{Remark}[\textbf{Risk neutral GBM}]
+	Choosing $\lambda(t) = \frac{\mu - r}{\sigma}$, the GBM process under risk-neutral measure can be written as
+	\begin{align*}
+		\dd{S_t} & = \mu S_t \dd{t} + \sigma S_t \dd{W^\mathbb{P}}
+		\\
+		& = \mu S_t \dd{t} + \sigma S_t \big[\dd{W^\mathbb{Q}} - \lambda(t) \dd{t} \big]
+		\\
+		& = r S_t \dd{t} + \sigma S_t \dd{W^\mathbb{Q}}.
+	\end{align*}
+\end{Remark}
 
-Thus, choosing $\lambda(t) = \frac{\mu - r}{\sigma}$, the discounted risk neutral process can be expressed as
+\begin{Remark}[\textbf{Change of Numeraire}]
+	Choosing $\lambda(t) = \frac{\mu - r}{\sigma}$, the discounted risk neutral process can be expressed as
 	\begin{align*}
 		\dd{\left(\frac{S_t}{B_t}\right)} & = \frac{S_t}{B_t} (\mu - r) \dd{t} + \sigma \dd{W^\mathbb{P}}
 		\\
@@ -394,7 +405,9 @@ Thus, choosing $\lambda(t) = \frac{\mu - r}{\sigma}$, the discounted risk neutra
 		\\
 		& = \frac{S_t}{B_t} \sigma \dd{W^\mathbb{Q}},
 	\end{align*}
-which is a Martingale.
+	which is a Martingale.
+\end{Remark}
+
 
 \begin{Remark}
 	Since choice of $\lambda(t)$ is unique here to generate a Martingle process, $\mathbb{Q}$ is known as unique equivalent martingale (EMM) which equals to say that $\mathbb{Q}$ is a risk-neutral measure.
