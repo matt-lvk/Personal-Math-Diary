@@ -445,7 +445,34 @@ For no arbitrage, there is no drift term, so the Black-Scholes equation equals t
 	\pdv{C}{t}  + r S_t \pdv{C}{S_t} + \frac{1}{2}  \sigma^2 S_t^2 \pdv[2]{C}{S_t} -rC = 0
 \end{equation}
 
-Next, we derive the price of European vanilla options
+\begin{Remark}
+	If there is a dividend $d$, the BS equation is 
+	\[
+		\pdv{C}{t}  + ({\color{red}r-d})S_t \pdv{C}{S_t} + \frac{1}{2}  \sigma^2 S_t^2 \pdv[2]{C}{S_t} -rC = 0
+	\]
+\end{Remark}
+
+\subsubsection{Solving Black-Scholes Equation}
+From \eqref{black_scholes}, we denote the operator
+	\[
+		L := - \left(r S_t \pdv{S_t} + \frac{\sigma^2}{2} S^2_t \pdv[2]{S_t} - r\right)
+	\]
+Then, BS can be rewritten as
+\begin{equation}
+	\begin{cases}
+		\big(\p_t + L\big) C(S_t, t) &= 0 \\
+		C(x, 0) & = (e^x - e^{x_0})^+,
+	\end{cases}
+\end{equation}
+where $x = \log S$.
+We can calculate the heat-kernel of the BS-equation by using Fourier Transform, $U_{\textbf{BS}}(\tau; x - y)$. Thus, 
+\[
+C_{\textbf{BS}}(\tau, x) = \int_{x_0}^\R U_{\textbf{BS}}(\tau; x - y)C(y, 0) \dd{y}
+\]
+
+
+\subsubsection{Derivation of European Call Option}
+
 \begin{Proposition}\label{BS_0}
 	Let $g(0,\infty) \to \R_+$ be a claim such that $g(x) \leq c(1+x)$ for some $c\geq 0$ and $X = g(S_T)$. Then the value process $(V_t(X))_{t\in[0,T]}$ satisfies $V_t(X) = \nu(t,S_t)$ where
 	\begin{equation}\label{option_v}
