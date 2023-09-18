@@ -455,8 +455,9 @@ For no arbitrage, there is no drift term, so the Black-Scholes equation equals t
 \subsubsection{Solving Black-Scholes Equation}
 From \eqref{black_scholes}, we denote the operator
 	\[
-		L := - \left(r S_t \pdv{S_t} + \frac{\sigma^2}{2} S^2_t \pdv[2]{S_t} - r\right)
+		L := - \left( (r-d) S_t \pdv{S_t} + \frac{\sigma^2}{2} S^2_t \pdv[2]{S_t} - r\right),
 	\]
+where $d$ is the dividend. 
 Then, BS can be rewritten as
 \begin{equation}
 	\begin{cases}
@@ -465,10 +466,29 @@ Then, BS can be rewritten as
 	\end{cases}
 \end{equation}
 where $x = \log S$.
+
+Denote
+\begin{align*}
+	\alpha &:= \frac{\sigma^2}{2} \\
+	\beta &:= (d-r)\\
+	\tau &:= T-t
+\end{align*}
+Then
+\[
+	L = -\alpha \p_x^2 + \beta \p_x + r.
+\]
 We can calculate the heat-kernel of the BS-equation by using Fourier Transform, $U_{\textbf{BS}}(\tau; x - y)$. Thus, 
 \[
-C_{\textbf{BS}}(\tau, x) = \int_{x_0}^\R U_{\textbf{BS}}(\tau; x - y)C(y, 0) \dd{y}
+C_{\textbf{BS}}(\tau, x) = \int_{x_0}^\infty U_{\textbf{BS}}(\tau; x - y)C(y, 0) \dd{y},
 \]
+where the kernel is obtained by calculating
+\begin{align*}
+	U_{\textbf{BS}}(\tau; x - y) &= \frac{1}{2\pi} \int_\R e^{-p(x-y)} e^{-\tau( {\color{red} \alpha p^2 + i\beta p + r} )} \dd{y}
+	\\
+	& = \frac{e^{-r\tau}}{2\pi} \int_\R e^{- \left[p\sqrt{\alpha \tau}  - i  \frac{x-y-\beta\tau}{2 \sqrt{\alpha\tau}}\right]^2 } \dd{y}
+	\\
+	& = \frac{e^{-r\tau}}{\sqrt{4\pi \alpha \tau}} \exp(-\frac{(x-y-\beta\tau)^2}{4\alpha\tau}) .
+\end{align*}
 
 
 \subsubsection{Derivation of European Call Option}
