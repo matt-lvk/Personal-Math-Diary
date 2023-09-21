@@ -600,8 +600,43 @@ The value process is therefore,
  V_t(X) = e^{-r(T-t)} \E^Q [X|\mathcal{F}_t]
 \]
 
-\section{Stochastic Volatility}
+\subsection{Stochastic Volatility}
 
+\section{Value at Risk}
+Definition
+\[
+	\alpha = \int^\infty_{-\text{VaR}} f(x) \dd{x},
+\]
+where $f$ is a probability density function. If the probability density is well defined and the CDF has inverse, we may calculate the VaR as follows
+\begin{align*}
+	\alpha & = \int^\infty_{-\text{VaR}} f(x) \dd{x} = 1 - \Phi(\text{VaR})
+	\\
+	\text{VaR} & = \Phi^{-1}(1 - \alpha).
+\end{align*}
+If $f$ is probability density function of a normal distribution $\mathcal{N}(\mu, \sigma^2)$, then
+\[
+\text{VaR} =z_\alpha \sigma.
+\]
+If there is a time horizon $T$, then
+\[
+\text{VaR}(T) =z_\alpha \sqrt{T} \sigma.
+\]
+
+\subsubsection{Expected shortfall}
+
+Expected shortfall (ES) is a risk measure—a concept used in the field of financial risk measurement to evaluate the market risk or credit risk of a portfolio. The "expected shortfall at q\% level" is the expected return on the portfolio in the worst q \% of cases. ES is an alternative to value at risk that is more sensitive to the shape of the tail of the loss distribution.
+
+Expected shortfall is considered a more useful risk measure than VaR because it is a coherent spectral measure of financial portfolio risk. It is calculated for a given quantile-level q q and is defined to be the mean loss of portfolio value given that a loss is occurring at or below the q q-quantile.
+
+Let $X \in L^p (\mathcal{F})$, the formula can be written as
+\begin{align*}
+	\text{ES}_\alpha (X) &= \mathbb{E} [-X \mid X \geq - \text{VaR}_\alpha(X)]
+	\\
+	& = - \frac{1}{\alpha} \int_0^\alpha \text{VaR}_\gamma \dd{\gamma}
+	\\
+	& =  - \frac{1}{\alpha} \int^{-\text{VaR}_\alpha}_{-\infty} x f(x) \dd{x},
+\end{align*}
+where $f$ is the probability density function.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 %	Time Series
